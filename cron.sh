@@ -7,7 +7,7 @@ if [ ! -f "$LOG_FILE" ]; then
     exit 1
 fi
 
-LAST_MOD_FILE="/home/vboxuser/Downloads/tmp/last_mod_time.log"
+LAST_MOD_FILE="/home/vboxuser/Downloads/tem/last_mod_time.log"
 
 CURRENT_MOD_TIME=$(stat -c %Y "$LOG_FILE")
 
@@ -30,6 +30,10 @@ if [ "$CURRENT_MOD_TIME" -ne "$LAST_MOD_TIME" ]; then
     # Get file size
     FILE_SIZE=$(stat -c %s "$LOG_FILE")
     MOD_DATE=$(date -r "$LOG_FILE" +"%Y-%m-%d %H:%M:%S")
+    
+    # Debug output to check FILE_SIZE and MOD_DATE
+    echo "File size: $FILE_SIZE"
+    echo "Modification date: $MOD_DATE"
 
     # Write size and modification date to Redis
     redis-cli HSET log_info size "$FILE_SIZE" modified_date "$MOD_DATE"
